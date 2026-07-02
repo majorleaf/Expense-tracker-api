@@ -14,7 +14,7 @@ const registerUser = async (req, res)  => {
             return res.status(400).json({ message: "All fields are required"});
           }
 
-          const userExists= await User.findOne({username});
+          const userExists = await User.findOne({username});
           if(userExists) {
             return res.status(400).json({ message: "Username already exists"});
 
@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
         //Find user by username in the database
         const user= await User.findOne({ username });
         if(!user) {
-            return re.status(400).json({ message: "Invalid username or password"});
+            return res.status(400).json({ message: "Invalid username or password"});
         }
          //Check if the password matches the hashed password in the  database
         const isMatch = await bcrypt.compare(password, user.password);
@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
         // Generate JWT token 
         const token = jwt.sign(
             {id: user._id, username: user.username}, // the payload of the token
-            process.env.JWT_SECRET_KEY, // secret key used to sign the token
+            process.env.JWT_SECRET, // secret key used to sign the token
             { expiresIn: "30d"}
 
         );
@@ -85,9 +85,11 @@ const loginUser = async (req, res) => {
 
     }catch(error) {
         console.log(error);
+        res.return(500).json({ message: "Server error"});
     }
 };
 
 
-export default { registerUser, loginUser};
+export  { registerUser, loginUser };
+
 
