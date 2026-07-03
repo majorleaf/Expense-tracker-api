@@ -4,7 +4,7 @@ import Expense from '../models/expenseSchema.js';
 
 // Add a new expense
 // POST /api/expense
-const addExpense = async (req, res) => {
+ export const addExpense = async (req, res) => {
     try {
         const { title, amount, category, date } = req.body;
 
@@ -30,7 +30,7 @@ const addExpense = async (req, res) => {
 
 
 // GET api/expense
-const getExpense = async (req, res) => {
+export const getExpense = async (req, res) => {
     try {
         // get filter queries from the Url
         const { filter, startDate, endDate } = req.body; 
@@ -78,7 +78,7 @@ const getExpense = async (req, res) => {
 
 
 // update an expense  ||  PUT /api/expense/:id
-const updateExpense = async (req, res) => {
+export const updateExpense = async (req, res) => {
     try{
         const expense = await Expense.findById(req.params.id);
         // check if expense exists
@@ -101,7 +101,7 @@ const updateExpense = async (req, res) => {
 }
 
 
-const deleteExpense = async (req, res) => {
+export const deleteExpense = async (req, res) => {
     try{
         const expense = await Expense.findById(req.params.id);
 
@@ -123,4 +123,5 @@ const deleteExpense = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server error'});
     }
-}
+};
+

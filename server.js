@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config'; // Automatically loads the .env variables
 import connectDb from './config/mongodb.js';
 import router from './routes/authRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
 
 const app = express();
 // Add a fallback port just in case .env doesn't have one
@@ -14,6 +15,7 @@ connectDb();
 
 
 app.use('/api/auth', router);
+app.use('/api/expenses', expenseRoutes);
 
 app.get('/', (req, res) => {
     console.log('Test route hit!');
