@@ -86,8 +86,13 @@ const updateExpense = async (req, res) => {
             return res.status(404).json({ message: 'Expense not found'});
         }
         // Make sure the logged in user is the owner of this expense 
-        
+        if(expense.userId.toString() !== req.user.id) {
+            return res.status(401).json({ message: "Not authorized"});
+        }
 
+        //update it
+        const updateExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(updateExpense);
 
     } catch(error) {
         console.error(error);
@@ -98,6 +103,21 @@ const updateExpense = async (req, res) => {
 
 const deleteExpense = async (req, res) => {
     try{
+        const expense = await Expense.findById(req.params.id);
+
+        //check if expense exists
+        if(!expense) {
+            return res.status(404).json({ message: "Expense not found"});
+        }
+        // Make sure the logged in user is owner of this expense 
+        if(expense.userId.toString() !== req.user.id ) {
+            return res.status(401).json({ message: "Not authorized"});
+        }
+
+        //delete it
+        await expense.deleteOne();
+        res.status(200).json({ id: req.params.id, message: "Expense deleted successfully"});
+
         
     } catch(error) {
         console.error(error);
